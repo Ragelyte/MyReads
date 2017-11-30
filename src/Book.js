@@ -9,13 +9,6 @@ class Book extends Component {
         shelf: 'none'
     }
 
-    addToBookshelf = (bookshelf) => {
-        BooksAPI.update(this.props.book, bookshelf).then(() => {
-            if (this.props.onBookShelfChange)
-                this.props.onBookShelfChange()
-        })
-    }
-
     componentDidMount() {
         if (this.props.book.shelf === undefined) {
             BooksAPI.get(this.props.book.id).then(book => {
@@ -32,7 +25,7 @@ class Book extends Component {
 
     render() {
 
-        const {book} = this.props;
+        const {book: { title, authors, imageLinks }, onBookShelfChange} = this.props;
 
         return (
             <div className="book">
@@ -40,10 +33,10 @@ class Book extends Component {
                     <div className="book-cover" style={{
                         width: 128,
                         height: 193,
-                        backgroundImage: `url(${book.imageLinks.smallThumbnail})`
+                        backgroundImage: `url(${imageLinks.smallThumbnail})`
                     }}/>
                     <div className="book-shelf-changer">
-                        <select value={this.state.shelf} onChange={(event) => this.addToBookshelf(event.target.value)}>
+                        <select value={this.state.shelf} onChange={(event) => onBookShelfChange(event.target.value, this.props.book)}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
@@ -52,8 +45,8 @@ class Book extends Component {
                         </select>
                     </div>
                 </div>
-                <div className="book-title">{book.title}</div>
-                <div className="book-authors">{book.authors ? book.authors.toString() : ''}</div>
+                <div className="book-title">{title}</div>
+                <div className="book-authors">{authors ? authors.toString() : ''}</div>
             </div>
         )
     }

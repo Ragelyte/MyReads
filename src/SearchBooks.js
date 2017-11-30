@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
+import PropTypes from 'prop-types'
 
 class SearchBooks extends Component {
 
@@ -37,7 +38,7 @@ class SearchBooks extends Component {
                     <ol className="books-grid">
                         {this.state.books.map((book) => (
                             <li key={book.id}>
-                                <Book book={book}/>
+                                <Book onBookShelfChange={this.props.updateMyBooks} book={book}/>
                             </li>
                         ))}
                     </ol>
@@ -45,6 +46,10 @@ class SearchBooks extends Component {
             </div>
         )
     }
+}
+
+SearchBooks.PropTypes = {
+    updateMyBooks: PropTypes.func.isRequired
 }
 
 export default SearchBooks
